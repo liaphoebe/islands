@@ -1,0 +1,113 @@
+---
+ name: "Upolu"
+ events:
+   - name: "Founding Event"
+     type_: "Settling"
+     curve: "square root"
+     parameters:
+       - type_: "Population Change"
+         value: [ 2.95, 3.0 ]
+         unit: "log(Ne)"
+       - type_: "Carry Capacity"
+         value: 3.6
+         unit: "log(Ne)"
+       - type_: "Growth Rate"
+         value: [ [ 2.95, 3.0 ], [ 3.4, 3.6 ], 2100 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: [ 2750, 2880 ]
+         unit: "years ago"
+   - name: "Agriculture Start"
+     type_: "Modal Shift"
+     curve: "logistic"
+     parameters:
+       - type_: "Carry Capacity"
+         value: 145000
+         unit: "raw"
+       - type_: "Growth Rate"
+         value: [ [ 3.4, 3.6 ], [ 4.4, 4.5 ], 690 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: ~
+         unit: ~
+         follow: "Savai'i::Agriculture Start"
+   - name: "European Arrival"
+     type_: "Modal Shift"
+     parameters:
+       - type_: "Growth Rate"
+         value: [ [ 4.4, 4.5 ], [ 4.2, 4.25 ], 150 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: 1722
+         unit: "CE"
+---
+ name: "Savai'i"
+ events:
+   - name: "Founding Event"
+     type_: "Settling"
+     curve: "square root"
+     parameters:
+       - type_: "Population Change"
+         value: [ 2.85, 2.9 ]
+         unit: "log(Ne)"
+       - type_: "Carry Capacity"
+         value: 3.6
+         unit: "log(Ne)"
+       - type_: "Growth Rate"
+         value: [ [ 2.85, 2.9 ], [ 3.5, 3.6 ], 1500 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: [ 2750, 2880 ]
+         unit: "years ago"
+   - name: "Immigration Wave"
+     type_: "Settling"
+     parameters:
+       - type_: "Population Change"
+         value: [ 100, 300 ]
+         unit: "raw"
+       - type_: "Carry Capacity"
+         value: 3.45
+         unit: "log(Ne)"
+       - type_: "Growth Rate"
+         value: [ [ 3.5, 3.6 ], [ 3.3, 3.45 ], 600 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: [ 50, 67 ]
+         unit: "generations ago"
+         distribution:
+           type_: "normal"
+           mu: 50
+           sigma: 12 #heuristic
+   - name: "Agriculture Start"
+     type_: "Modal Shift"
+     curve: "logistic"
+     parameters:
+       - type_: "Carry Capacity"
+         # Originally, I had set this to 43142 because it is the current (ish) population of Savai'i. But for growth
+         #   growth rates that would linearly produce a population greater than that number, the logistic fit
+         #   throws an error. So I'm likely going to set it to 70K instead, which is higher than the highest expectation
+         #   for population here. 10^4.8 == 63K ish. 
+         value: 100000
+         unit: "raw"
+       - type_: "Growth Rate"
+         value: [ [ 3.3, 3.45 ], [ 4.0, 4.8 ], 450 ]
+         unit: "log(Ne)"
+         # Historically, this event occurs around the 33 generations ago mark, which is between 17 and 34 generations after the 
+         #   immigration wave above. 
+       - type_: "Year"
+         value: [ 17, 34 ] 
+         unit: "generations ago"
+         follow: "Savai'i::Immigration Wave"
+         distribution:
+           type_: "normal"
+           sigma: 33
+           mu: 5 #heuristic
+   - name: "European Arrival"
+     type_: "Modal Shift"
+     parameters:
+       - type_: "Growth Rate" 
+         value: [ [ 4.0, 4.8 ], [ 3.75, 3.8 ], 150 ]
+         unit: "log(Ne)"
+       - type_: "Year"
+         value: 1722
+         unit: "CE"
